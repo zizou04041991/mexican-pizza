@@ -1,7 +1,0 @@
-{
-  "routes": {
-    "/mexican-pizza": {},
-    "/mexican-pizza/admin": {},
-    "/mexican-pizza/request": {}
-  }
-}
