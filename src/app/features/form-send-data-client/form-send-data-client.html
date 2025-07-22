@@ -1,0 +1,166 @@
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div
+    class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl"
+  >
+    <div class="p-8">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-800">
+          Introduzca sus datos personales
+        </h2>
+        <p class="mt-2 text-sm text-gray-600">Por favor completa tus datos</p>
+      </div>
+
+      <form
+        [formGroup]="registerDataPersonForm"
+        (ngSubmit)="onSubmit()"
+        class="space-y-6"
+      >
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+            [class.border-red-500]="registerDataPersonForm.get('email')?.invalid && registerDataPersonForm.get('email')?.touched"
+          />
+
+          @if (registerDataPersonForm.get('email')?.invalid &&
+          registerDataPersonForm.get('email')?.touched) {
+          <div class="text-red-500 text-xs mt-1">
+            @if (registerDataPersonForm.get('email')?.errors?.['required']) {
+            <span>Email es requerido</span>
+            } @if (registerDataPersonForm.get('email')?.errors?.['email']) {
+            <span>Ingresa un email válido</span>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Nombre y Apellidos -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <!-- Nombre -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700"
+              >Nombre</label
+            >
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+              [class.border-red-500]="registerDataPersonForm.get('name')?.invalid && registerDataPersonForm.get('name')?.touched"
+            />
+
+            @if (registerDataPersonForm.get('name')?.invalid &&
+            registerDataPersonForm.get('name')?.touched) {
+            <div class="text-red-500 text-xs mt-1">Nombre es requerido</div>
+            }
+          </div>
+
+          <!-- Apellidos -->
+          <div>
+            <label
+              for="lastName"
+              class="block text-sm font-medium text-gray-700"
+              >Apellidos</label
+            >
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+              [class.border-red-500]="registerDataPersonForm.get('lastName')?.invalid && registerDataPersonForm.get('lastName')?.touched"
+            />
+
+            @if (registerDataPersonForm.get('lastName')?.invalid &&
+            registerDataPersonForm.get('lastName')?.touched) {
+            <div class="text-red-500 text-xs mt-1">
+              Apellidos son requeridos
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Dirección -->
+        <div>
+          <label for="address" class="block text-sm font-medium text-gray-700"
+            >Dirección</label
+          >
+          <input
+            id="address"
+            type="text"
+            formControlName="address"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+            [class.border-red-500]="registerDataPersonForm.get('address')?.invalid && registerDataPersonForm.get('address')?.touched"
+          />
+
+          @if (registerDataPersonForm.get('address')?.invalid &&
+          registerDataPersonForm.get('address')?.touched) {
+          <div class="text-red-500 text-xs mt-1">Dirección es requerida</div>
+          }
+        </div>
+
+        <!-- Célula y Teléfono -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <!-- Célula -->
+          <div>
+            <label for="dni" class="block text-sm font-medium text-gray-700"
+              >Célula</label
+            >
+            <input
+              id="dni"
+              type="text"
+              formControlName="dni"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+              [class.border-red-500]="registerDataPersonForm.get('dni')?.invalid && registerDataPersonForm.get('dni')?.touched"
+            />
+
+            @if (registerDataPersonForm.get('dni')?.invalid &&
+            registerDataPersonForm.get('dni')?.touched) {
+            <div class="text-red-500 text-xs mt-1">Célula es requerida</div>
+            }
+          </div>
+
+          <!-- Teléfono -->
+          <div>
+            <label for="movil" class="block text-sm font-medium text-gray-700"
+              >Teléfono Móvil</label
+            >
+            <input
+              id="movil"
+              type="tel"
+              formControlName="movil"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+              [class.border-red-500]="registerDataPersonForm.get('movil')?.invalid && registerDataPersonForm.get('movil')?.touched"
+            />
+
+            @if (registerDataPersonForm.get('movil')?.invalid &&
+            registerDataPersonForm.get('movil')?.touched) {
+            <div class="text-red-500 text-xs mt-1">
+              @if (registerDataPersonForm.get('movil')?.errors?.['required']) {
+              <span>Teléfono es requerido</span>
+              } @if (registerDataPersonForm.get('movil')?.errors?.['pattern']) {
+              <span>Ingresa 9 dígitos</span>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Botón de enviar -->
+        <div>
+          <button
+            type="submit"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            Registrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

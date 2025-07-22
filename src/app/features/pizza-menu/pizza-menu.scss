@@ -1,0 +1,16 @@
+// Estilos base de Swiper
+@use 'swiper/scss';
+@use 'swiper/scss/navigation';
+@use 'swiper/scss/pagination';
+
+// Personalización
+swiper-container {
+  --swiper-navigation-color: #ef4444; /* color rojo-500 */
+  --swiper-pagination-color: #ef4444;
+  --swiper-pagination-bullet-size: 10px;
+  padding-bottom: 30px; /* espacio para paginación */
+
+  swiper-slide {
+    height: auto; /* para que las cards no colapsen */
+  }
+}

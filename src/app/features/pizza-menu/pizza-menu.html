@@ -1,0 +1,14 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  @for (item of pizzas(); track item.id) {
+    <app-pizza-card
+      [id]="item.id"
+      [name]="item.name"
+      [price]="item.price"
+      [urlImage]="item.urlImage"
+      [ingredients]="item.ingredients"
+      [quantityInitial]="getQuantity(item.id)"
+      (addToCart)="updateCart($event)"
+      class="w-full"
+    />
+  }
+</div>
