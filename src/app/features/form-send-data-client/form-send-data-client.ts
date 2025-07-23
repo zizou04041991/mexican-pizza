@@ -1,24 +1,22 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { PizzaStore } from '../../store/store';
+import { ModalServices } from '../../shared/services/modal-services';
 
 @Component({
   selector: 'app-form-send-data-client',
   imports: [ReactiveFormsModule],
   templateUrl: './form-send-data-client.html',
   styleUrl: './form-send-data-client.scss',
-  //providers: [PizzaStore],
 })
-export class FormSendDataClient implements OnInit{
+export class FormSendDataClient {
   registerDataPersonForm: FormGroup;
-  readonly store = inject(PizzaStore);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private modalService: ModalServices) {
     this.registerDataPersonForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
@@ -29,15 +27,16 @@ export class FormSendDataClient implements OnInit{
     });
   }
 
-  ngOnInit(): void {
-    
-  }
-
-  onSubmit() {
+  aceptar(): void {
     if (this.registerDataPersonForm.valid) {
-      this.store.updateClient(this.registerDataPersonForm.getRawValue());
+      this.modalService.closeWithResult(this.registerDataPersonForm);
     } else {
       this.registerDataPersonForm.markAllAsTouched();
     }
+  }
+
+  cancelar(): void {
+    // Cerramos sin devolver datos (o podríamos devolver null)
+    this.modalService.closeWithResult();
   }
 }

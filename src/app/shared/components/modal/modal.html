@@ -1,0 +1,36 @@
+<div 
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      [class]="isClosing ? 'opacity-0' : 'opacity-100'"
+      style="background-color: rgba(107, 114, 128, 0.5); backdrop-filter: blur(4px); transition: opacity 0.3s ease;"
+    >
+      <div 
+        class="relative flex flex-col bg-white rounded-xl shadow-2xl transform transition-all"
+        [style.width]="modalWidth"
+        [style.max-width]="modalMaxWidth"
+        [style.height]="modalHeight"
+        [style.max-height]="modalMaxHeight"
+        [ngClass]="{
+          'scale-95 opacity-0': isClosing,
+          'scale-100 opacity-100': !isClosing
+        }"
+        style="transition: transform 0.3s ease, opacity 0.3s ease;"
+      >
+        <!-- Header -->
+        <div class="flex items-center justify-between p-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-800">{{title}}</h2>
+          <button 
+            class="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
+            (click)="closeModal()"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Contenido dinámico -->
+        <div class="flex-1 overflow-y-auto p-4">
+          <ng-container #modalContent></ng-container>
+        </div>
+      </div>
+    </div>
