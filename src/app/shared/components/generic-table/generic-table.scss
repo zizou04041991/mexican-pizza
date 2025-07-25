@@ -1,0 +1,9 @@
+/* Transiciones suaves para los botones */
+button {
+  transition: all 0.2s ease;
+}
+
+/* Efecto al hacer hover en botones de acción */
+button:hover {
+  transform: scale(1.05);
+}

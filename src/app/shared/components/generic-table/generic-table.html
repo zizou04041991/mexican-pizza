@@ -1,0 +1,117 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full bg-white rounded-lg overflow-hidden">
+    <thead class="bg-gray-800 text-white">
+      <tr>
+        @for (column of columns; track column.key) {
+          <th class="py-3 px-4 text-{{column.align || 'left'}}">{{column.label}}</th>
+        }
+        @if (showActions && actions.length > 0) {
+          <th class="py-3 px-4 text-center">Acciones</th>
+        }
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      @if (data.length > 0) { 
+        @for (item of paginatedItems; track $index; let i = $index) {
+          <tr [class.bg-gray-50]="i % 2 === 0" [class.bg-white]="i % 2 !== 0">
+            @for (column of columns; track column.key) {
+              <td 
+                class="py-3 px-4 text-{{column.align || 'left'}}"
+                [class.cursor-pointer]="column.clickable"
+                [class.font-medium]="column.type === 'currency'"
+                (click)="onCellClick(column, item)"
+              >
+                @switch (column.type) {
+                  @case ('currency') {
+                    {{ item[column.key] | number:column.format || '1.2-2' }}
+                  }
+                  @case ('number') {
+                    {{ item[column.key] | number:column.format || '1.0-0' }}
+                  }
+                  @case ('date') {
+                    {{ item[column.key] | date:column.format || 'mediumDate' }}
+                  }
+                  @default {
+                    {{ item[column.key] }}
+                  }
+                }
+              </td>
+            }
+            @if (showActions && actions.length > 0) {
+              <td class="py-3 px-4 text-center">
+                <div class="flex items-center justify-center gap-2">
+                  @for (action of actions; track action.action) {
+                    <button
+                      (click)="onActionClick(action.action, item, $event)"
+                      [class]="getButtonClass(action)"
+                      [title]="action.label || action.action"
+                    >
+                      @if (action.icon) {
+                        <i [class]="action.icon"></i>
+                      } @else {
+                        {{ action.label || action.action }}
+                      }
+                    </button>
+                  }
+                </div>
+              </td>
+            }
+          </tr>
+        } 
+      } @else {
+        <tr>
+          <td [attr.colspan]="columns.length + (showActions && actions.length > 0 ? 1 : 0)" class="py-8 text-center text-gray-500 italic">
+            No hay datos disponibles
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+@if(data.length > 0){
+<div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4">
+  <div class="flex items-center gap-2">
+    <span class="text-sm text-gray-700">Items por página:</span>
+    <select
+      [ngModel]="pageSize"
+      (ngModelChange)="onPageSizeChange($event)"
+      class="border border-gray-300 rounded-md px-3 py-1 text-sm"
+    >
+      @for (option of pageSizeOptions; track option) {
+      <option [value]="option">{{ option }}</option>
+      }
+    </select>
+  </div>
+
+  <nav class="inline-flex rounded-md shadow">
+    <button
+      (click)="onPageChange(currentPage - 1)"
+      [disabled]="currentPage === 1"
+      class="px-3 py-1 rounded-l-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+    >
+      Anterior
+    </button>
+
+    @for (page of [].constructor(totalPages); track $index) {
+    <button
+      (click)="onPageChange($index + 1)"
+      [class]="currentPage === $index + 1 ? 
+              'bg-blue-600 text-white px-4 py-1 border border-blue-600' : 
+              'bg-white text-gray-700 hover:bg-gray-50 px-4 py-1 border border-gray-300'"
+    >
+      {{ $index + 1 }}
+    </button>
+    }
+
+    <button
+      (click)="onPageChange(currentPage + 1)"
+      [disabled]="currentPage === totalPages"
+      class="px-3 py-1 rounded-r-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+    >
+      Siguiente
+    </button>
+  </nav>
+</div>
+}

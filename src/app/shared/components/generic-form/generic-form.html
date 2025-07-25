@@ -1,0 +1,38 @@
+<form [formGroup]="formGroup" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  @for (field of fields; track field.name) {
+    <div [class]="getFieldSpanClass(field)">
+      <label [for]="field.name" class="block text-sm font-medium text-gray-700">
+        {{field.label}}@if (field.required) {<span class="text-red-500">*</span>}
+      </label>
+
+      @if (field.type === 'textarea') {
+        <textarea
+          [id]="field.name"
+          [formControlName]="field.name"
+          rows="3"
+          [placeholder]="field.placeholder || ''"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none"
+          [ngClass]="getFieldClasses(field.name)"
+        ></textarea>
+      } @else {
+        <input
+          [id]="field.name"
+          [type]="field.type"
+          [formControlName]="field.name"
+          [placeholder]="field.placeholder || ''"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none"
+          [ngClass]="getFieldClasses(field.name)"
+        >
+      }
+
+      @if (formGroup.get(field.name)?.invalid && formGroup.get(field.name)?.touched) {
+        @for (error of getErrors(field.name); track error) {
+          <p class="mt-2 text-sm text-red-600">{{error}}</p>
+        }
+      }
+    </div>
+  }
+
+  <!-- Espacio para botones u otros elementos -->
+  <ng-content></ng-content>
+</form>

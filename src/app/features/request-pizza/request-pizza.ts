@@ -6,16 +6,26 @@ import { DecimalPipe } from '@angular/common';
 import { FormSendDataClient } from '../form-send-data-client/form-send-data-client';
 import { ModalServices } from '../../shared/services/modal-services';
 import { Client } from '../form-send-data-client/interfaces/client';
+import { ToastrService } from 'ngx-toastr';
+import {
+  GenericTable,
+  TableAction,
+  TableColumn,
+} from '../../shared/components/generic-table/generic-table';
 
 @Component({
   selector: 'app-request-pizza',
   standalone: true,
-  imports: [FormsModule, DecimalPipe],
+  imports: [FormsModule, DecimalPipe, GenericTable],
   templateUrl: './request-pizza.html',
   styleUrl: './request-pizza.scss',
+  providers: [ToastrService],
 })
 export class RequestPizza {
   store = inject(PizzaStore);
+  toastr: ToastrService = inject(ToastrService);
+  modalServices: ModalServices = inject(ModalServices);
+
   readonly isCartEmpty = computed(() => this.store.getCart().length === 0);
 
   // Señales para paginación
@@ -36,8 +46,72 @@ export class RequestPizza {
   totalPages = computed(() =>
     Math.ceil(this.cartItems().length / this.pageSize())
   );
+  cartItemsWithSubtotal = computed(() =>
+    this.cartItems().map((item) => ({
+      ...item,
+      subtotal: item.price * item.count,
+    }))
+  );
+  // Configuración de columnas para la tabla genérica
+  columns: TableColumn[] = [
+    { key: 'name', label: 'Nombre' },
+    { key: 'ingredients', label: 'Ingredientes' },
+    { key: 'price', label: 'Precio', type: 'currency', align: 'right' },
+    { key: 'count', label: 'Cantidad', align: 'center' },
+    {
+      key: 'subtotal',
+      label: 'Subtotal',
+      type: 'currency',
+      align: 'right',
+      clickable: true,
+    },
+    { key: 'status', label: 'Estado', align: 'right' },
+  ];
 
-  constructor(private modalServices: ModalServices) {}
+  // Acciones para la tabla genérica
+actions: TableAction[] = [
+  { 
+    action: 'decrement', 
+    icon: 'fas fa-minus', 
+    color: 'orange',
+    class: 'bg-orange-500 hover:bg-orange-600' 
+  },
+  { 
+    action: 'increment', 
+    icon: 'fas fa-plus', 
+    color: 'green',
+    class: 'bg-green-500 hover:bg-green-600' 
+  },
+  { 
+    action: 'remove', 
+    icon: 'fas fa-trash', 
+    color: 'red',
+    class: 'bg-red-500 hover:bg-red-600' 
+  }
+];
+
+  // Métodos para manejar eventos
+  handleAction(event: { action: string; item: any }): void {
+    switch (event.action) {
+      case 'decrement':
+        this.decrementQuantity(event.item);
+        break;
+      case 'increment':
+        this.incrementQuantity(event.item);
+        break;
+      case 'remove':
+        this.removeItem(event.item.id);
+        break;
+    }
+  }
+
+  handleCellClick(event: { column: string; item: any }): void {
+    console.log('Celda clickeada:', event.column, event.item);
+    // Aquí puedes manejar el click en celdas específicas
+    if (event.column === 'subtotal') {
+      // Lógica para manejar click en subtotal
+    }
+  }
 
   // Métodos
   incrementQuantity(item: PizzaCartItem) {
@@ -71,6 +145,7 @@ export class RequestPizza {
   }
 
   async pay() {
+
     if (this.cartItems().length > 0) {
       try {
         this.dataModalAccept = await this.modalServices.open(
@@ -84,7 +159,7 @@ export class RequestPizza {
         );
 
         if (this.dataModalAccept) {
-          // alert(`Orden completada por $${this.totalPrice().toFixed(2)}`);
+          this.toastr.success(`Orden completada por $${this.totalPrice().toFixed(2)}`, 'Éxito');
           this.store.clearCart();
         }
       } catch (error) {}

@@ -4,13 +4,7 @@ import {
   ComponentRef,
   ApplicationRef,
   createComponent,
-  EnvironmentInjector,
-  AfterViewInit,
-  OnDestroy,
-  Input,
-  ViewChild,
-  ViewContainerRef,
-  inject,
+  EnvironmentInjector
 } from '@angular/core';
 import { Modal } from '../components/modal/modal';
 import { Subject } from 'rxjs';
